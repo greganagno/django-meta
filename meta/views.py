@@ -18,8 +18,8 @@ class Meta(object):
         self.use_sites = kwargs.get('use_sites', settings.USE_SITES)
         self.title = kwargs.get('title')
         self.description = kwargs.get('description')
-        self.extra_props = kwargs.get('extra_props')
-        self.extra_custom_props = kwargs.get('extra_custom_props')
+        self.extra_props = kwargs.get('extra_props',settings.EXTRA_PROPS)
+        self.extra_custom_props = kwargs.get('extra_custom_props',settings.EXTRA_CUSTOM_PROPS)
         self.custom_namespace = kwargs.get('custom_namespace', settings.OG_NAMESPACES)
         self.keywords = kwargs.get('keywords')
         self.url = kwargs.get('url')
@@ -143,15 +143,18 @@ class MetadataMixin(object):
     locale = None
     use_sites = False
     use_og = False
+    use_twitter = False
+    use_facebook = False
+    use_googleplus = False
     use_title_tag = False
     gplus_type = None
     gplus_author = None
     gplus_publisher = None
 
     def __init__(self, **kwargs):
-        self.use_sites = settings.USE_SITES
-        self.use_og = settings.USE_OG_PROPERTIES
-        self.use_title_tag = settings.USE_TITLE_TAG
+        self.use_sites = type(self).use_sites or settings.USE_SITES
+        self.use_og = type(self).use_og or settings.USE_OG_PROPERTIES
+        self.use_title_tag = type(self).use_title_tag or settings.USE_TITLE_TAG
         super(MetadataMixin, self).__init__(**kwargs)
 
     def get_meta_class(self):
@@ -185,25 +188,25 @@ class MetadataMixin(object):
         return self.site_name or settings.SITE_NAME
 
     def get_meta_extra_props(self, context=None):
-        return self.extra_props
+        return self.extra_props or settings.EXTRA_PROPS
 
     def get_meta_extra_custom_props(self, context=None):
-        return self.extra_custom_props
+        return self.extra_custom_props or settings.EXTRA_CUSTOM_PROPS
 
     def get_meta_custom_namespace(self, context=None):
         return self.custom_namespace or settings.OG_NAMESPACES
 
     def get_meta_twitter_site(self, context=None):
-        return self.twitter_site
+        return self.twitter_site or settings.TWITTER_SITE
 
     def get_meta_twitter_creator(self, context=None):
-        return self.twitter_creator
+        return self.twitter_creator or settings.TWITTER_AUTHOR
 
     def get_meta_twitter_card(self, context=None):
         return self.twitter_card
 
     def get_meta_facebook_app_id(self, context=None):
-        return self.facebook_app_id
+        return self.facebook_app_id or settings.FB_APPID
 
     def get_meta_gplus_type(self, context=None):
         return self.gplus_type
@@ -222,6 +225,9 @@ class MetadataMixin(object):
             use_og=self.use_og,
             use_title_tag=self.use_title_tag,
             use_sites=self.use_sites,
+            use_twitter = self.use_twitter,
+            use_facebook = self.use_facebook,
+            use_googleplus = self.use_googleplus,
             title=self.get_meta_title(context=context),
             description=self.get_meta_description(context=context),
             extra_props=self.get_meta_extra_props(context=context),

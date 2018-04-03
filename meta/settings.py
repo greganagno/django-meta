@@ -18,6 +18,8 @@ USE_GOOGLEPLUS_PROPERTIES = getattr(django_settings, 'META_USE_GOOGLEPLUS_PROPER
 USE_SITES = getattr(django_settings, 'META_USE_SITES', False)
 USE_TITLE_TAG = getattr(django_settings, 'META_USE_TITLE_TAG', False)
 OG_NAMESPACES = getattr(django_settings, 'META_OG_NAMESPACES', None)
+EXTRA_PROPS = getattr(django_settings, 'META_EXTRA_PROPS', None)
+EXTRA_CUSTOM_PROPS = getattr(django_settings, 'META_EXTRA_CUSTOM_PROPS', None)  
 
 OBJECT_TYPES = (
     ('Article', _('Article')),
